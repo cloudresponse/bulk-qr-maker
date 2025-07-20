@@ -1,16 +1,16 @@
 [tool.poetry]
 name = "qr-maker"
 version = "0.1.0"
-description = ""
+description = "A Python application that generates QR codes from serial numbers stored in a CSV file with text labels"
 authors = ["Grant Johnson <grant.johnson@cloudresponse.co.uk>"]
 readme = "README.md"
 packages = [{include = "qr_maker"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-pandas = "^2.0.3"
+pandas = "^2.1.4"
 qrcode = {extras = ["pil"], version = "^7.4.2"}
-
+pillow = "^10.1.0"
 
 [build-system]
 requires = ["poetry-core"]
