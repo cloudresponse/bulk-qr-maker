@@ -1,18 +1,19 @@
-[tool.poetry]
+[project]
 name = "qr-maker"
 version = "0.1.0"
 description = "A Python application that generates QR codes from serial numbers stored in a CSV file with text labels"
-authors = ["Grant Johnson <grant.johnson@cloudresponse.co.uk>"]
+authors = [{ name = "Grant Johnson", email = "grant.johnson@cloudresponse.co.uk" }]
+requires-python = ">=3.13,<4"
 readme = "README.md"
-packages = [{include = "qr_maker"}]
+dependencies = [
+    "pandas>=2.1.4,<3",
+    "qrcode[pil]>=7.4.2,<8",
+    "pillow>=10.1.0,<11",
+    "rich>=13.0.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-pandas = "^2.1.4"
-qrcode = {extras = ["pil"], version = "^7.4.2"}
-pillow = "^10.1.0"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = [
+    "ruff>=0.14.9",
+]
 

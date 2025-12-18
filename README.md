@@ -7,18 +7,18 @@ A Python application that generates QR codes from serial numbers stored in a CSV
 - Reads serial numbers from a CSV file
 - Generates QR codes for each serial number
 - Adds the serial number text below the QR code
-- Saves images in inverted color scheme (white QR codes on black background)
+- Saves images in inverted colour scheme (white QR codes on black background)
 - Supports custom fonts (currently uses Arial)
-- Creates organized output directory structure
+- Creates organised output directory structure
 
 ## Requirements
 
-- Python 3.9 or higher
-- Poetry (recommended) or pip
+- Python 3.13 or higher
+- [uv](https://docs.astral.sh/uv/) (recommended) or pip
 
 ## Installation
 
-### Using Poetry (Recommended)
+### Using uv (Recommended)
 
 1. Clone the repository:
 ```bash
@@ -28,12 +28,7 @@ cd qr-maker
 
 2. Install dependencies:
 ```bash
-poetry install
-```
-
-3. Activate the virtual environment:
-```bash
-poetry shell
+uv sync
 ```
 
 ### Using pip
@@ -46,7 +41,7 @@ cd qr-maker
 
 2. Install dependencies:
 ```bash
-pip install -r requirements.txt
+pip install .
 ```
 
 ## Usage
@@ -63,6 +58,11 @@ pip install -r requirements.txt
 
 2. **Run the application**:
 ```bash
+uv run python main.py
+```
+
+Or if you have activated a virtual environment:
+```bash
 python main.py
 ```
 
@@ -73,15 +73,15 @@ python main.py
 ```
 qr-maker/
 ├── main.py              # Main application script
-├── pyproject.toml       # Poetry configuration
-├── requirements.txt     # pip dependencies
-├── README.md           # This file
-├── .gitignore          # Git ignore rules
-├── data/               # Input CSV files
-│   └── serials.csv     # Serial numbers data
-├── fonts/              # Font files
-│   └── arial.ttf       # Arial font for text rendering
-└── export/             # Generated QR code images
+├── pyproject.toml       # Project configuration and dependencies
+├── uv.lock              # Locked dependency versions
+├── README.md            # This file
+├── .gitignore           # Git ignore rules
+├── data/                # Input CSV files
+│   └── serials.csv      # Serial numbers data
+├── fonts/               # Font files
+│   └── arial.ttf        # Arial font for text rendering
+└── export/              # Generated QR code images
 ```
 
 ## Dependencies
@@ -89,7 +89,7 @@ qr-maker/
 - **pandas**: Data manipulation and CSV reading
 - **qrcode**: QR code generation
 - **Pillow (PIL)**: Image processing and manipulation
-- **numpy**: Numerical operations (required by pandas)
+- **rich**: Beautiful terminal output and progress bars
 
 ## Configuration
 

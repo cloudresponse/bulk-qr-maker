@@ -1,7 +1,14 @@
 import os
+import sys
+
 import pandas as pd
 import qrcode
 from PIL import Image, ImageDraw, ImageFont, ImageOps
+from rich.console import Console
+from rich.panel import Panel
+from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn, TimeElapsedColumn
+
+console = Console()
 
 
 def create_directory_structure():
@@ -14,8 +21,8 @@ def create_directory_structure():
 def read_data(filepath):
     """Read the CSV data file."""
     if not os.path.isfile(filepath):
-        print(f'{filepath} not found')
-        exit()
+        console.print(f"[red bold]Error:[/] File not found: [cyan]{filepath}[/]")
+        sys.exit(1)
 
     return pd.read_csv(filepath)
 
@@ -60,19 +67,48 @@ def save_image(img, filename):
 
 
 def main():
+    console.print(Panel.fit(
+        "[bold]QR Code Generator[/]\nGenerates QR codes from serial numbers",
+        border_style="blue"
+    ))
+
     create_directory_structure()
-    df = read_data('./data/serials.csv')
+
+    data_file = './data/serials.csv'
     font_path = './fonts/arial.ttf'
     output_dir = './export'
+
+    console.print(f"\n[dim]Reading data from[/] [cyan]{data_file}[/]")
+    df = read_data(data_file)
+    total = len(df)
+
+    console.print(f"[dim]Found[/] [green]{total}[/] [dim]serial numbers to process[/]\n")
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    for index, row in df.iterrows():
-        print(f"({index + 1}/{len(df)}) Generating QR code for {row['Serial']}")
-        img = generate_qr(row['Serial'])
-        img_with_text = add_text_to_image(img, row['Serial'], font_path)
-        save_image(img_with_text, f"{output_dir}/{row['Serial']}.png")
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(),
+        TaskProgressColumn(),
+        TimeElapsedColumn(),
+        console=console,
+    ) as progress:
+        task = progress.add_task("[cyan]Generating QR codes...", total=total)
+
+        for _, row in df.iterrows():
+            serial = row['Serial']
+            progress.update(task, description=f"[cyan]Processing [bold]{serial}[/bold]")
+
+            img = generate_qr(serial)
+            img_with_text = add_text_to_image(img, serial, font_path)
+            save_image(img_with_text, f"{output_dir}/{serial}.png")
+
+            progress.advance(task)
+
+    console.print(f"\n[green]✓[/] Successfully generated [bold]{total}[/] QR codes")
+    console.print(f"[dim]Output directory:[/] [cyan]{output_dir}[/]")
 
 
 if __name__ == "__main__":
