@@ -8,7 +8,7 @@ readme = "README.md"
 dependencies = [
     "pandas>=2.1.4,<3",
     "qrcode[pil]>=7.4.2,<8",
-    "pillow>=10.1.0,<11",
+    "pillow>=12.2.0,<13",
     "rich>=13.0.0",
 ]
 
